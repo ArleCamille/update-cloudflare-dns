@@ -1,0 +1,25 @@
+[Unit]
+Description=Update CloudFlare DNS entries
+# Add below only for system-level
+Requires=network.target
+After=network.target
+
+[Service]
+Type=oneshot
+
+# This service requires three environment variables.
+# 1. Your e-mail address used to login to CloudFlare (CLOUDFLARE_EMAIL)
+# 2. Your global CloudFlare API key (CLOUDFLARE_KEY; The API doesn't seem to support tokens yet)
+# 3. Domains to update with your IPv4 address (CLOUDFLARE_TARGET; Comma-separated)
+Environment="CLOUDFLARE_EMAIL=admin@example.com"
+Environment="CLOUDFLARE_KEY=example_key"
+Environment="CLOUDFLARE_TARGET=domain1,domain2"
+
+# Be sure to modify the path of the Python script.
+ExecStart=/usr/bin/python /path/to/cloudflare-ddns.py
+
+[Install]
+# For system-level service
+WantedBy=multi-user.target
+# For user-level service
+WantedBy=default.target
